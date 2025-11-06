@@ -1,92 +1,88 @@
 "use client";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import api from "@/utils/api"; // your axios instance
+import { useRouter } from "next/navigation";
+import api from "@/utils/api"; // Your configured axios instance
 import Header from "@/public/src/components/RegistrationPageComponents/header";
-
-// --- Helper component for the back arrow ---
-const BackArrowIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="w-4 h-4 mr-1"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-    />
-  </svg>
-);
 
 const Registration = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const Programid = searchParams.get("Programid");
 
-  // Form states
+  // Form states - 'fullname' is fine for the UI
   const [fullname, setFullname] = useState("");
-  const [matricnumber, setMatricnumber] = useState("");
   const [email, setEmail] = useState("");
-  const [department, setDepartment] = useState("");
-  const [gender, setGender] = useState("");
-  const [photo, setPhoto] = useState(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Feedback and loading
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Go back
-  const handleGoBack = () => router.push("./");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (!fullname || !matricnumber || !email || !department || !gender || !photo) {
+    // --- Frontend Validation ---
+    if (!fullname || !email || !password || !confirmPassword) {
       setError("Please fill in all required fields.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("fullname", fullname);
-    formData.append("matricnumber", matricnumber);
-    formData.append("email", email);
-    formData.append("department", department);
-    formData.append("gender", gender);
-    formData.append("photo", photo);
-    formData.append("eventId", Programid);
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // --- THIS IS THE FIX ---
+    // The payload now sends 'name' (which your backend expects)
+    // using the value from the 'fullname' state.
+    const payload = {
+      name: fullname, // <-- The fix is right here
+      email,
+      password,
+    };
+    // --- END OF FIX ---
 
     try {
       setLoading(true);
-      await api.post("/participants/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
 
-      setSuccess("Registration successful! You will be redirected.");
+      // Send payload to your superadmin endpoint
+      // Your controller sends back a { success: true, message: "...", ... }
+      const response = await api.post("/auth/register-superadmin", payload);
+
+      // Use the success message from your backend controller
+      setSuccess(
+        response.data.message ||
+          "Registration successful! Please check your email."
+      );
       setError("");
 
       // Reset form
       setFullname("");
-      setMatricnumber("");
       setEmail("");
-      setDepartment("");
-      setGender("");
-      setPhoto(null);
+      setPassword("");
+      setConfirmPassword("");
 
-      // Redirect after success
+      // Redirect to the AdminLogin page
       setTimeout(() => {
-        router.push("./");
-      }, 2000);
+        router.push("/AdminLogin");
+      }, 3000); // 3 seconds to read the success message
     } catch (err) {
-      console.error(err);
-      const message = err.response?.data?.message || "Registration failed. Please try again.";
-      setError(message);
+      console.error(err); // Log the full error
+
+      // This will now display the JSON error message from your backend
+      let message = "Registration failed. Please try again.";
+      if (err.response?.data?.message) {
+        // This will show "User with this email already exists" etc.
+        message = err.response.data.message;
+      } else if (err.response?.status === 400) {
+        message = "Validation Failed: The server rejected the data.";
+      }
+
+      if (err.response?.status !== 401) {
+        setError(message);
+      }
       setSuccess("");
     } finally {
       setLoading(false);
@@ -96,15 +92,9 @@ const Registration = () => {
   // Tailwind classes
   const inputStyle =
     "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm " +
-    "focus:outline-none focus:ring-[#7741C3] focus:border-[#7741C3] sm:text-sm text-black"; // <-- text-black added
+    "focus:outline-none focus:ring-[#7741C3] focus:border-[#7741C3] sm:text-sm text-black";
 
   const labelStyle = "block text-sm font-medium text-gray-900";
-
-  const fileInputStyle =
-    "mt-1 block w-full text-sm text-black " + // <-- text-black added
-    "file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 " +
-    "file:text-sm file:font-semibold file:bg-purple-50 file:text-[#7741C3] " +
-    "hover:file:bg-purple-100 cursor-pointer";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -114,33 +104,29 @@ const Registration = () => {
       </div>
 
       {/* Content */}
-      <div className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Back Button */}
-        <button
-          onClick={handleGoBack}
-          className="mb-4 inline-flex items-center text-sm font-medium text-[#7741C3] hover:text-[#5e339a] transition-colors"
-        >
-          <BackArrowIcon />
-          Back to Events
-        </button>
-
+      <div className="w-full max-w-lg mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Form */}
         <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md border border-gray-200">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900">Event Registration</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Create Superadmin Account
+            </h2>
             <p className="mt-1 text-md text-gray-700">
-              Please fill in your details to register for this event.
+              Please fill in your details to sign up.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             {/* Fullname */}
             <div>
-              <label htmlFor="fullname" className={labelStyle}>Fullname</label>
+              {/* This label can stay as "Fullname" for the user */}
+              <label htmlFor="fullname" className={labelStyle}>
+                Fullname
+              </label>
               <input
                 type="text"
                 id="fullname"
-                value={fullname}
+                value={fullname} // State is still 'fullname'
                 onChange={(e) => setFullname(e.target.value)}
                 className={inputStyle}
                 placeholder="e.g. John Doe"
@@ -148,23 +134,11 @@ const Registration = () => {
               />
             </div>
 
-            {/* Matric number */}
-            <div>
-              <label htmlFor="matric" className={labelStyle}>Matric number</label>
-              <input
-                type="text"
-                id="matric"
-                value={matricnumber}
-                onChange={(e) => setMatricnumber(e.target.value)}
-                className={inputStyle}
-                placeholder="e.g. 12345678"
-                required
-              />
-            </div>
-
             {/* Email */}
             <div>
-              <label htmlFor="email" className={labelStyle}>Email</label>
+              <label htmlFor="email" className={labelStyle}>
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -176,44 +150,34 @@ const Registration = () => {
               />
             </div>
 
-            {/* Department */}
+            {/* Password */}
             <div>
-              <label htmlFor="department" className={labelStyle}>Department</label>
+              <label htmlFor="password" className={labelStyle}>
+                Password
+              </label>
               <input
-                type="text"
-                id="department"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className={inputStyle}
-                placeholder="e.g. Computer Science"
+                placeholder="••••••••"
                 required
               />
             </div>
 
-            {/* Gender */}
+            {/* Confirm Password */}
             <div>
-              <label htmlFor="gender" className={labelStyle}>Gender</label>
-              <select
-                id="gender"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                className={inputStyle}
-                required
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-
-            {/* Photo Upload */}
-            <div>
-              <label className={labelStyle}>Upload your Passport Photograph</label>
+              <label htmlFor="confirmPassword" className={labelStyle}>
+                Confirm Password
+              </label>
               <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setPhoto(e.target.files[0])}
-                className={fileInputStyle}
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={inputStyle}
+                placeholder="••••••••"
                 required
               />
             </div>
@@ -231,7 +195,7 @@ const Registration = () => {
                 disabled={loading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7741C3] hover:bg-[#6a39a9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7741C3] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Please wait..." : "Register"}
+                {loading ? "Please wait..." : "Create Account"}
               </button>
             </div>
           </form>
