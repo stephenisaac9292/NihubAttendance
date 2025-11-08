@@ -1,45 +1,57 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
+// 1. IMPORT your official auth functions
+import { setAuth, getUser, getToken, logout as authLogout } from "@/utils/auth";
 
 export const Rolecontex = createContext();
 
 export const RoleProvider = ({ children }) => {
   const [Role, setRole] = useState(null);
   const [token, setToken] = useState(null);
-  // 1. NEW: Start as true because we are checking storage first thing
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedRole = localStorage.getItem("userRole");
-      const storedToken = localStorage.getItem("userToken");
-      
-      if (storedRole && storedToken) {
-        setRole(storedRole);
-        setToken(storedToken);
-      }
-    }
-    // 2. NEW: We are done checking, turn off loading
-    setIsLoading(false);
+    // 2. USE your auth functions to read from LocalStorage
+    const initAuth = () => {
+        const user = getUser();
+        const storedToken = getToken();
+
+        if (user?.role && storedToken) {
+          console.log("✅ Restored session for:", user.role);
+          setRole(user.role);
+          setToken(storedToken);
+        } else {
+          console.log("ℹ️ No valid session found");
+        }
+        setIsLoading(false);
+    };
+    initAuth();
   }, []);
 
   const login = (user, apiToken) => {
-    // ... (keep existing validation checks) ...
-    localStorage.setItem("userRole", user.role);
-    localStorage.setItem("userToken", apiToken);
+    // 3. CRITICAL: Use setAuth to save.
+    // Your setAuth function is: setAuth(token, user)
+    // So we pass the token first, then the user.
+    setAuth(apiToken, user); 
+    
+    // 4. Update React state
     setRole(user.role);
     setToken(apiToken);
   };
 
   const logout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userToken");
+    // 5. USE your auth function to clear LocalStorage
+    authLogout();
+    
+    // 6. Clear React state
     setRole(null);
     setToken(null);
+    
+    // 7. Redirect to login
+    window.location.href = "/AdminLogin";
   };
 
   return (
-    // 3. NEW: Pass isLoading to the rest of the app
     <Rolecontex.Provider value={{ Role, token, isLoading, login, logout }}>
       {children}
     </Rolecontex.Provider>

@@ -40,43 +40,23 @@ const Admin = () => {
   const fetchAdmins = async () => {
     try {
       setLoading(true);
-      console.log("Fetching admins...");
       
-      const response = await api.get("/users/admins");
-      console.log("Admins response:", response);
-      console.log("Response data:", response.data);
+      const response = await api.get("/users");
       
-      // Handle nested response structure - adjust based on your API
-      let adminsData = [];
-      
-      if (Array.isArray(response.data)) {
-        adminsData = response.data;
-      } else if (response.data?.data) {
-        if (Array.isArray(response.data.data)) {
-          adminsData = response.data.data;
-        } else if (response.data.data.admins) {
-          adminsData = response.data.data.admins;
-        } else if (response.data.data.users) {
-          adminsData = response.data.data.users;
-        }
-      } else if (response.data?.admins) {
-        adminsData = response.data.admins;
-      } else if (response.data?.users) {
-        adminsData = response.data.users;
-      }
-      
-      console.log("Extracted admins:", adminsData);
-      setAdmins(adminsData);
-      setError("");
+      // 1. Extract users safely
+      let allUsers = response.data?.data?.users || response.data?.data || response.data || [];
+      if (!Array.isArray(allUsers)) allUsers = [];
+
+      // 2. UPDATED FILTER: Allow both 'admin' and 'superadmin'
+      const filteredAdmins = allUsers.filter(user => 
+        user.role && ['admin', 'superadmin'].includes(user.role.toLowerCase())
+      );
+
+      setAdmins(filteredAdmins);
     } catch (err) {
-      console.error("Failed to fetch admins", err);
-      console.error("Error response:", err.response);
-      
-      // Only show error if it's not just an empty list (404)
+      console.error("FETCH ERROR:", err);
       if (err.response?.status !== 404) {
          setError("Could not load admin list.");
-      } else {
-        setAdmins([]);
       }
     } finally {
       setLoading(false);
@@ -123,18 +103,21 @@ const Admin = () => {
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this admin?")) return;
-    
+
     try {
-      // Optimistic update
+      // Optimistic update: Remove from UI immediately
       setAdmins(admins.filter(a => (a.id || a._id) !== id));
-      
+
+      // UPDATED ENDPOINT
       await api.delete(`/users/${id}`);
+
       setSuccess("Admin deleted successfully");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("Delete error:", err);
       setError("Failed to delete admin");
-      fetchAdmins(); // Revert on error
+      // Revert optimistic update on error by re-fetching
+      fetchAdmins();
     }
   };
 
@@ -176,6 +159,7 @@ const Admin = () => {
         {success && <div className={style.success}>{success}</div>}
 
         <div className={style.tableCard}>
+            
           <div className={style.tableHeader}>
             <span>Full Name</span>
             <span>Email Address</span>

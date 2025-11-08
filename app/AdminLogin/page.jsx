@@ -185,7 +185,7 @@ const AdminLogin = () => {
           <p>
             Don't have an account?
             <button
-              onClick={() => router.push("/Registration")}
+              onClick={() => router.push("/SuperAdminLogin")}
               type="button"
             >
               Register here
