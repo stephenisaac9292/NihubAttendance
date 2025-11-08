@@ -90,25 +90,23 @@ const Admin = () => {
     setSuccess("");
 
     if (!newAdmin.fullname || !newAdmin.email || !newAdmin.password) {
-      setError("Please fill in all fields."); 
+      setError("Please fill in all fields.");
       return;
     }
     if (newAdmin.password.length < 6) {
-      setError("Password must be at least 6 characters."); 
+      setError("Password must be at least 6 characters.");
       return;
     }
 
     try {
       setCreating(true);
-      console.log("Creating admin:", newAdmin);
-      
-      const response = await api.post("/auth/register-admin", {
+      // UPDATED ENDPOINT AND PAYLOAD
+      await api.post("/users", {
         name: newAdmin.fullname,
         email: newAdmin.email,
-        password: newAdmin.password
+        password: newAdmin.password,
+        role: "admin" // Explicitly set the role
       });
-      
-      console.log("Create response:", response);
       
       setSuccess("New admin created successfully!");
       setShowModal(false);
@@ -117,7 +115,6 @@ const Admin = () => {
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("Create admin error:", err);
-      console.error("Error response:", err.response);
       setError(err.response?.data?.message || "Failed to create admin.");
     } finally {
       setCreating(false);
