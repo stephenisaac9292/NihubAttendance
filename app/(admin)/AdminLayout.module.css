@@ -1,0 +1,62 @@
+/* Styles from your AddEvent, ManageEvent, etc. */
+.container {
+  padding: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.Titleandlogoutcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.logoutbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.logout {
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-top: 0.5rem;
+}
+
+.buttonscontainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.buttonscontainer button {
+  padding: 0.75rem 1rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #4b5563;
+  border-bottom: 2px solid transparent;
+}
+
+.buttonscontainer button.Active,
+.buttonscontainer button:hover {
+  color: #7741C3;
+  border-bottom-color: #7741C3;
+}

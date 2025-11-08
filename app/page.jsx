@@ -81,4 +81,3 @@ return (
   </div>
   )}
 
-    // <EventRegistration data={data}/>

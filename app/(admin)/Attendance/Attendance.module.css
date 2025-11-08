@@ -1,0 +1,524 @@
+/* ==================== PAGE WRAPPER ==================== */
+.pageWrapper {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ==================== HEADER SECTION ==================== */
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ==================== EVENT SELECTOR ==================== */
+.selectorContainer {
+  min-width: 300px;
+}
+
+.eventSelector {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.eventSelector:hover {
+  border-color: #7741C3;
+}
+
+.eventSelector:focus {
+  outline: none;
+  border-color: #7741C3;
+  box-shadow: 0 0 0 3px rgba(119, 65, 195, 0.1);
+}
+
+/* ==================== STATS GRID ==================== */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.statCardPresent::before {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.statCardAbsent::before {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.statIcon svg {
+  width: 24px;
+  height: 24px;
+  color: #7741C3;
+}
+
+.statCardPresent .statIcon {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.statCardPresent .statIcon svg {
+  color: #059669;
+}
+
+.statCardAbsent .statIcon {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+}
+
+.statCardAbsent .statIcon svg {
+  color: #dc2626;
+}
+
+.statCard h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ==================== CONTENT CARD ==================== */
+.contentCard {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  overflow: hidden;
+}
+
+/* ==================== TOOLBAR ==================== */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.searchContainer {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  font-size: 0.95rem;
+  color: #374151;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  background: white;
+  border-color: #7741C3;
+  box-shadow: 0 0 0 3px rgba(119, 65, 195, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.toolbarActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.qrButton, .markAllBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.qrButton svg, .markAllBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.qrButton {
+  color: #7741C3;
+  background: rgba(119, 65, 195, 0.1);
+  border: 1px solid rgba(119, 65, 195, 0.2);
+}
+
+.qrButton:hover {
+  background: rgba(119, 65, 195, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(119, 65, 195, 0.2);
+}
+
+.markAllBtn {
+  color: white;
+  background: linear-gradient(135deg, #7741C3 0%, #6a39a9 100%);
+  box-shadow: 0 4px 6px -1px rgba(119, 65, 195, 0.3);
+}
+
+.markAllBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6a39a9 0%, #5a2d8f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(119, 65, 195, 0.4);
+}
+
+.markAllBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==================== STATUS MESSAGES ==================== */
+.error, .success {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.error {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.error::before {
+  content: '⚠';
+  font-size: 1.2rem;
+}
+
+.success {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.success::before {
+  content: '✓';
+  font-size: 1.2rem;
+}
+
+/* ==================== TABLE ==================== */
+.tableContainer {
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-bottom: 2px solid #e5e7eb;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.listBody {
+  max-height: 500px;
+}
+
+.listItem {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.listItem:hover {
+  background: #f9fafb;
+}
+
+.studentName {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.matric {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+}
+
+/* ==================== BADGES ==================== */
+.badgePresent, .badgeAbsent {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  border: 1px solid;
+}
+
+.badgePresent {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border-color: #86efac;
+}
+
+.badgeAbsent {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+/* ==================== MARK BUTTON ==================== */
+.markBtn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #7741C3 0%, #6a39a9 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(119, 65, 195, 0.2);
+}
+
+.markBtn:hover {
+  background: linear-gradient(135deg, #6a39a9 0%, #5a2d8f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(119, 65, 195, 0.3);
+}
+
+/* ==================== EMPTY STATES ==================== */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.emptyState svg {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.emptyState p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ==================== LOADING SPINNER ==================== */
+.loadingSpinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(119, 65, 195, 0.2);
+  border-top-color: #7741C3;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1024px) {
+  .tableHeader, .listItem {
+    grid-template-columns: 1.5fr 1fr 0.8fr 0.8fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 1rem;
+  }
+
+  .headerSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .selectorContainer {
+    width: 100%;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchContainer {
+    max-width: 100%;
+  }
+
+  .toolbarActions {
+    width: 100%;
+  }
+
+  .qrButton, .markAllBtn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .tableHeader {
+    display: none;
+  }
+
+  .listItem {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .listItem > span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .listItem > span::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .statCard {
+    padding: 1.25rem;
+  }
+
+  .statNumber {
+    font-size: 1.75rem;
+  }
+}

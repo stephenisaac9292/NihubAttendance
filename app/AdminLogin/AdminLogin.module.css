@@ -1,0 +1,355 @@
+/* ==================== PAGE BACKGROUND ==================== */
+.pageWrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.pageWrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+}
+
+/* ==================== BACK BUTTON ==================== */
+.backButtonContainer {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 10;
+}
+
+.backbotton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.backbotton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.backbotton::before {
+  content: '←';
+  font-size: 1.2rem;
+}
+
+/* ==================== MAIN CONTAINER ==================== */
+.container {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+/* ==================== HEADER SECTION ==================== */
+.headerSection {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logoContainer {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #7741C3 0%, #6a39a9 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(119, 65, 195, 0.3);
+}
+
+.logoContainer svg {
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.Login {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  text-align: center;
+  color: #374151;
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0 0;
+  font-weight: 500;
+}
+
+/* ==================== ROLE SELECTOR ==================== */
+.Role {
+  display: flex;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 12px;
+  padding: 0.35rem;
+  margin: 2rem 0 1.5rem 0;
+  border: 1px solid #e5e7eb;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.Role button {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.Role button:hover {
+  color: #374151;
+}
+
+.Role button.Active {
+  background: white;
+  color: #7741C3;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* ==================== FORM STYLING ==================== */
+.loginForm {
+  margin-top: 1.5rem;
+}
+
+/* Input field spacing and sizing */
+.loginForm > * {
+  margin-bottom: 1.25rem;
+}
+
+/* Override input styles for better readability */
+.loginForm :global(input) {
+  font-size: 1rem;
+  color: #000000;
+  padding: 0.85rem 1rem;
+}
+
+.loginForm :global(label) {
+  font-size: 0.95rem;
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* ==================== ERROR MESSAGE ==================== */
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  margin: 1rem 0;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.error::before {
+  content: '⚠';
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* ==================== SUBMIT BUTTON ==================== */
+.submit {
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #7741C3 0%, #6a39a9 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(119, 65, 195, 0.3);
+}
+
+.submit:hover {
+  background: linear-gradient(135deg, #6a39a9 0%, #5a2d8f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(119, 65, 195, 0.4);
+}
+
+.submit:active {
+  transform: translateY(0);
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #9ca3af;
+  box-shadow: none;
+  transform: none;
+}
+
+.submit:disabled:hover {
+  background: #9ca3af;
+  transform: none;
+}
+
+/* ==================== REGISTRATION LINK ==================== */
+.registerLink {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.registerLink p {
+  font-size: 0.9rem;
+  color: #374151;
+  margin: 0;
+  font-weight: 500;
+}
+
+.registerLink button {
+  color: #7741C3;
+  font-weight: 600;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 0.25rem;
+}
+
+.registerLink button:hover {
+  color: #6a39a9;
+}
+
+/* ==================== LOADING SPINNER ==================== */
+.loadingSpinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  z-index: 10;
+}
+
+.footer a {
+  color: white;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 640px) {
+  .pageWrapper {
+    padding: 1rem;
+  }
+
+  .backButtonContainer {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .backbotton {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .container {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .Login {
+    font-size: 1.5rem;
+  }
+
+  .Role button {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .logoContainer {
+    width: 70px;
+    height: 70px;
+  }
+
+  .footer {
+    position: static;
+    margin-top: 2rem;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .headerSection {
+    margin-bottom: 1.5rem;
+  }
+
+  .Role {
+    margin: 1.5rem 0 1rem 0;
+  }
+}

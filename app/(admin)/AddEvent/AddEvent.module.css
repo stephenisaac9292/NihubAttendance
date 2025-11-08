@@ -1,0 +1,125 @@
+.formcontainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.create {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.createsubtitle {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+.inputcontainer, .inputcontainer2, .inputcontainer3 {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inputcontainer > * {
+  flex: 1;
+}
+
+.inputcontainer2 > * {
+  flex: 1;
+}
+
+.inputcontainer3 {
+  margin-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+}
+
+.button {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: #7741C3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button:first-of-type {
+  background-color: #f3f4f6;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+}
+
+.dropdowncontainer {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dropdowncontainer > * {
+  flex: 1 1 200px; /* Fields will wrap on small screens */
+}
+
+.button2 {
+  padding: 0.75rem;
+  background-color: #10B981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1 1 100%; /* Full width */
+  margin-top: 1rem;
+}
+
+.trackSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.trackTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.trackList {
+  list-style-type: disc;
+  padding-left: 2rem;
+  margin-top: 1rem;
+}
+
+.noTracks {
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.success {
+  color: green;
+  text-align: center;
+  margin-top: 1rem;
+}

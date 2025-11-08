@@ -1,19 +1,19 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api"; // Your configured axios instance
+import api from "@/utils/api";
 import Header from "@/public/src/components/RegistrationPageComponents/header";
 
 const Registration = () => {
   const router = useRouter();
 
-  // Form states - 'fullname' is fine for the UI
+  // Form states
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Feedback and loading
+  // Feedback states
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,9 +23,14 @@ const Registration = () => {
     setError("");
     setSuccess("");
 
-    // --- Frontend Validation ---
+    // Frontend Validation
     if (!fullname || !email || !password || !confirmPassword) {
       setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
       return;
     }
 
@@ -34,27 +39,25 @@ const Registration = () => {
       return;
     }
 
-    // --- THIS IS THE FIX ---
-    // The payload now sends 'name' (which your backend expects)
-    // using the value from the 'fullname' state.
+    // Prepare payload (backend expects 'name', not 'fullname')
     const payload = {
-      name: fullname, // <-- The fix is right here
-      email,
-      password,
+      name: fullname.trim(),
+      email: email.trim().toLowerCase(),
+      password: password.trim(),
     };
-    // --- END OF FIX ---
+
+    console.log("Registration payload:", { name: payload.name, email: payload.email });
 
     try {
       setLoading(true);
 
-      // Send payload to your superadmin endpoint
-      // Your controller sends back a { success: true, message: "...", ... }
       const response = await api.post("/auth/register-superadmin", payload);
 
-      // Use the success message from your backend controller
+      console.log("Registration successful:", response.data);
+
       setSuccess(
         response.data.message ||
-          "Registration successful! Please check your email."
+          "Registration successful! Redirecting to login..."
       );
       setError("");
 
@@ -64,25 +67,28 @@ const Registration = () => {
       setPassword("");
       setConfirmPassword("");
 
-      // Redirect to the AdminLogin page
+      // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push("/AdminLogin");
-      }, 3000); // 3 seconds to read the success message
+      }, 2000);
+
     } catch (err) {
-      console.error(err); // Log the full error
+      console.error("Registration error:", err);
+      console.error("Error response:", err.response?.data);
 
-      // This will now display the JSON error message from your backend
       let message = "Registration failed. Please try again.";
+      
       if (err.response?.data?.message) {
-        // This will show "User with this email already exists" etc.
         message = err.response.data.message;
+      } else if (err.response?.data?.error) {
+        message = err.response.data.error;
       } else if (err.response?.status === 400) {
-        message = "Validation Failed: The server rejected the data.";
+        message = "Invalid data. Please check your inputs.";
+      } else if (err.response?.status === 409) {
+        message = "User with this email already exists.";
       }
 
-      if (err.response?.status !== 401) {
-        setError(message);
-      }
+      setError(message);
       setSuccess("");
     } finally {
       setLoading(false);
@@ -119,14 +125,13 @@ const Registration = () => {
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             {/* Fullname */}
             <div>
-              {/* This label can stay as "Fullname" for the user */}
               <label htmlFor="fullname" className={labelStyle}>
-                Fullname
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 id="fullname"
-                value={fullname} // State is still 'fullname'
+                value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
                 className={inputStyle}
                 placeholder="e.g. John Doe"
@@ -137,7 +142,7 @@ const Registration = () => {
             {/* Email */}
             <div>
               <label htmlFor="email" className={labelStyle}>
-                Email
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -153,7 +158,7 @@ const Registration = () => {
             {/* Password */}
             <div>
               <label htmlFor="password" className={labelStyle}>
-                Password
+                Password <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -161,15 +166,16 @@ const Registration = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={inputStyle}
-                placeholder="••••••••"
+                placeholder="At least 6 characters"
                 required
+                minLength={6}
               />
             </div>
 
             {/* Confirm Password */}
             <div>
               <label htmlFor="confirmPassword" className={labelStyle}>
-                Confirm Password
+                Confirm Password <span className="text-red-500">*</span>
               </label>
               <input
                 type="password"
@@ -177,28 +183,48 @@ const Registration = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className={inputStyle}
-                placeholder="••••••••"
+                placeholder="Re-enter your password"
                 required
               />
             </div>
 
-            {/* Feedback */}
-            <div className="text-center">
-              {error && <p className="text-sm text-red-600">{error}</p>}
-              {success && <p className="text-sm text-green-600">{success}</p>}
-            </div>
+            {/* Feedback Messages */}
+            {error && (
+              <div className="text-center p-3 bg-red-50 border border-red-200 rounded-md">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
+            {success && (
+              <div className="text-center p-3 bg-green-50 border border-green-200 rounded-md">
+                <p className="text-sm text-green-600">{success}</p>
+              </div>
+            )}
 
             {/* Submit Button */}
             <div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7741C3] hover:bg-[#6a39a9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7741C3] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#7741C3] hover:bg-[#6a39a9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7741C3] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? "Please wait..." : "Create Account"}
+                {loading ? "Creating account..." : "Create Account"}
               </button>
             </div>
           </form>
+
+          {/* Link to Login */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <button
+                onClick={() => router.push("/AdminLogin")}
+                className="text-[#7741C3] hover:text-[#6a39a9] font-medium underline"
+                type="button"
+              >
+                Login here
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -20,12 +20,16 @@ export const setAuth = (token, user) => {
   
   // Get user data
   export const getUser = () => {
-    if (typeof window !== 'undefined') {
-      const user = localStorage.getItem('user');
-      return user ? JSON.parse(user) : null;
-    }
-    return null;
-  };
+  if (typeof window !== 'undefined') {
+    const user = localStorage.getItem('user');
+
+    // prevent parsing when value is `"undefined"` or empty
+    if (!user || user === "undefined") return null;
+
+    return JSON.parse(user);
+  }
+  return null;
+};
   
   // Check if user is authenticated
   export const isAuthenticated = () => {
